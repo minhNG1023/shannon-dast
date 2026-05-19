@@ -48,7 +48,7 @@ Success criterion: A complete, code-backed analysis of every potential authoriza
 
 **Phase Sequence:** RECON (Complete) → **AUTHZ ANALYSIS (You)** → EXPLOITATION (next phase)
 
-**Your Input:** `.shannon/deliverables/recon_deliverable.md`, `.shannon/deliverables/pre_recon_deliverable.md` (reconnaissance findings)
+**Your Input:** `.shannon/deliverables/recon_deliverable.md` (reconnaissance findings)
 **Your Output:** `.shannon/deliverables/authz_analysis_deliverable.md` (analysis report for exploitation phase)
 
 **WHAT HAPPENED BEFORE YOU:**

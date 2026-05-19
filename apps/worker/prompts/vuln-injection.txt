@@ -127,8 +127,9 @@ An **exploitable vulnerability** is a confirmed source-to-sink path where the en
   **Negative Injection Vulnerability Analysis (pre-exploitation)**
 
   - **Goal:** Prove whether untrusted input can influence the **structure** of a backend command (SQL or Shell) or reach sensitive **slots** without the correct defense. No live exploitation in this phase.
-  - **1) Create a To Do for each Injection Source found in the Pre-Recon Deliverable
-		  - inside of .shannon/deliverables/pre_recon_deliverable.md under the section "7. Injection Sources (Command Injection and SQL Injection)" use the TodoWrite tool to create a task for each discovered Injection Source. 
+  - **1) Create a To Do for each Injection Source found in the Recon Deliverable
+		  - inside of .shannon/deliverables/recon_deliverable.md under the section "9. Injection Sources" use the TodoWrite tool to create a task for each discovered Injection Source.
+		  - If the recon deliverable lacks injection source details, launch a Task agent to find all injection sources in the codebase (SQL queries, shell commands, file operations) reachable from network-accessible endpoints.
 		  - Note: All sources are marked as Tainted until they Hit a Santiization that matches the sink context. normalizers (lowercasing, trimming, JSON parse, schema decode) — still **tainted**.
     - **2) Trace Data Flow Paths from Source to Sink**
 		    - For each source, your goal is to identify every unique "Data Flow Path" to a database sink. A path is a distinct route the data takes through the code.

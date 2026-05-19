@@ -5,15 +5,14 @@
 // as published by the Free Software Foundation.
 
 /**
- * Temporal workflow for Shannon pentest pipeline.
+ * Temporal workflow for Shannon DAST pipeline.
  *
- * Orchestrates the penetration testing workflow:
- * 1. Pre-Reconnaissance (sequential)
- * 2. Reconnaissance (sequential)
- * 3-4. Vulnerability + Exploitation (5 pipelined pairs in parallel)
+ * Orchestrates the dynamic penetration testing workflow:
+ * 1. Reconnaissance (sequential)
+ * 2-3. Vulnerability + Exploitation (5 pipelined pairs in parallel)
  *      Each pair: vuln agent → queue check → conditional exploit
  *      No synchronization barrier - exploits start when their vuln finishes
- * 5. Reporting (sequential)
+ * 4. Reporting (sequential)
  *
  * Features:
  * - Queryable state via getProgress
@@ -51,7 +50,7 @@ import { classifyErrorCode, formatWorkflowError } from './workflow-errors.js';
 
 /** Agents this run is expected to produce — drives the resume short-circuit. */
 function computeExpectedAgents(vulnClasses: readonly VulnClass[], exploit: boolean): string[] {
-  const expected: string[] = ['pre-recon', 'recon'];
+  const expected: string[] = ['recon'];
   for (const cls of vulnClasses) {
     expected.push(`${cls}-vuln`);
     if (exploit) {
@@ -287,7 +286,7 @@ export async function pentestPipeline(input: PipelineInput): Promise<PipelineSta
     return resumeState?.completedAgents.includes(agentName) ?? false;
   };
 
-  // Run a sequential agent phase (pre-recon, recon)
+  // Run a sequential agent phase (recon)
   async function runSequentialPhase(
     phaseName: string,
     agentName: AgentName,
@@ -428,13 +427,10 @@ export async function pentestPipeline(input: PipelineInput): Promise<PipelineSta
 
     log.info(`Run scope: vuln_classes=[${selectedVulnClasses.join(', ')}] exploit=${exploit}`);
 
-    // === Phase 1: Pre-Reconnaissance ===
-    await runSequentialPhase('pre-recon', 'pre-recon', a.runPreReconAgent);
-
-    // === Phase 2: Reconnaissance ===
+    // === Phase 1: Reconnaissance ===
     await runSequentialPhase('recon', 'recon', a.runReconAgent);
 
-    // === Phases 3-4: Vulnerability Analysis + Exploitation (Pipelined) ===
+    // === Phases 2-3: Vulnerability Analysis + Exploitation (Pipelined) ===
     // Each vuln type runs as an independent pipeline:
     // vuln agent → queue check → conditional exploit agent
     // Exploits start immediately when their vuln finishes, not waiting for all.
@@ -523,7 +519,7 @@ export async function pentestPipeline(input: PipelineInput): Promise<PipelineSta
     state.currentAgent = null;
     await a.logPhaseTransition(activityInput, 'vulnerability-exploitation', 'complete');
 
-    // === Phase 5: Reporting ===
+    // === Phase 4: Reporting ===
     if (!shouldSkip('report')) {
       state.currentPhase = 'reporting';
       state.currentAgent = 'report';

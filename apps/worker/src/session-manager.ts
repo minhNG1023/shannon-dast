@@ -12,20 +12,13 @@ import type { AgentDefinition, AgentName, AgentValidator, PlaywrightSession, Vul
 
 // Agent definitions according to PRD
 export const AGENTS: Readonly<Record<AgentName, AgentDefinition>> = Object.freeze({
-  'pre-recon': {
-    name: 'pre-recon',
-    displayName: 'Pre-recon agent',
-    prerequisites: [],
-    promptTemplate: 'pre-recon-code',
-    deliverableFilename: 'pre_recon_deliverable.md',
-    modelTier: 'large',
-  },
   recon: {
     name: 'recon',
     displayName: 'Recon agent',
-    prerequisites: ['pre-recon'],
+    prerequisites: [],
     promptTemplate: 'recon',
     deliverableFilename: 'recon_deliverable.md',
+    modelTier: 'large',
   },
   'injection-vuln': {
     name: 'injection-vuln',
@@ -107,11 +100,10 @@ export const AGENTS: Readonly<Record<AgentName, AgentDefinition>> = Object.freez
 });
 
 // Phase names for metrics aggregation
-export type PhaseName = 'pre-recon' | 'recon' | 'vulnerability-analysis' | 'exploitation' | 'reporting';
+export type PhaseName = 'recon' | 'vulnerability-analysis' | 'exploitation' | 'reporting';
 
 // Map agents to their corresponding phases (single source of truth)
 export const AGENT_PHASE_MAP: Readonly<Record<AgentName, PhaseName>> = Object.freeze({
-  'pre-recon': 'pre-recon',
   recon: 'recon',
   'injection-vuln': 'vulnerability-analysis',
   'xss-vuln': 'vulnerability-analysis',
@@ -151,11 +143,8 @@ function createExploitValidator(vulnType: VulnType): AgentValidator {
 // Playwright session mapping - assigns each agent to a specific session for browser isolation
 // Keys are promptTemplate values from AGENTS registry
 export const PLAYWRIGHT_SESSION_MAPPING: Record<string, PlaywrightSession> = Object.freeze({
-  // Phase 1: Pre-reconnaissance
-  'pre-recon-code': 'agent1',
-
-  // Phase 2: Reconnaissance
-  recon: 'agent2',
+  // Phase 1: Reconnaissance
+  recon: 'agent1',
 
   // Phase 3: Vulnerability Analysis (5 parallel agents)
   'vuln-injection': 'agent1',
@@ -177,12 +166,6 @@ export const PLAYWRIGHT_SESSION_MAPPING: Record<string, PlaywrightSession> = Obj
 
 // Direct agent-to-validator mapping - much simpler than pattern matching
 export const AGENT_VALIDATORS: Record<AgentName, AgentValidator> = Object.freeze({
-  // Pre-reconnaissance agent - validates the code analysis deliverable created by the agent
-  'pre-recon': async (sourceDir: string): Promise<boolean> => {
-    const codeAnalysisFile = path.join(sourceDir, 'pre_recon_deliverable.md');
-    return await fs.pathExists(codeAnalysisFile);
-  },
-
   // Reconnaissance agent
   recon: async (sourceDir: string): Promise<boolean> => {
     const reconFile = path.join(sourceDir, 'recon_deliverable.md');

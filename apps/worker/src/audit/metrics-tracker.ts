@@ -319,7 +319,6 @@ export class MetricsTracker {
    */
   private calculatePhaseMetrics(successfulAgents: Array<[string, AgentAuditMetrics]>): Record<string, PhaseMetrics> {
     const phases: Record<PhaseName, AgentAuditMetrics[]> = {
-      'pre-recon': [],
       recon: [],
       'vulnerability-analysis': [],
       exploitation: [],

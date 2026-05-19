@@ -41,8 +41,7 @@ Exploitation: {{EXPLOITATION}}
 
 <input_files>
 You will analyze the following deliverable files:
-- `.shannon/deliverables/pre_recon_deliverable.md` - Initial reconnaissance and technology stack
-- `.shannon/deliverables/recon_deliverable.md` - Attack surface mapping and endpoint discovery
+- `.shannon/deliverables/recon_deliverable.md` - Reconnaissance, attack surface mapping, and technology stack
 - `.shannon/deliverables/comprehensive_security_assessment_report.md` - The already-concatenated report that you will modify
 </input_files>
 
@@ -76,7 +75,7 @@ IMPORTANT: Do NOT reorder the existing per-class report sections. Maintain the e
 </deliverable_instructions>
 
 <instructions>
-1. Read the pre_recon and recon deliverable files to gather security-relevant information:
+1. Read the recon deliverable file to gather security-relevant information:
    - Skip basic information such as technology stack information (the team knows their own stack)
    - Use technical leadership tone - precise but concise
    - Use the current date for the assessment date

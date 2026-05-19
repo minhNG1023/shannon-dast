@@ -7,7 +7,13 @@ Your goal is to create a comprehensive, structured map of the application's atta
 </objective>
 
 <starting_context>
-Your analysis must begin by reading and fully comprehending the initial intelligence report located at `.shannon/deliverables/pre_recon_deliverable.md`. This file contains the initial source code analysis. This is your only starting information.
+You are the **FIRST AI AGENT** in this DAST pipeline. No prior analysis exists — you must build the foundational intelligence baseline from scratch using both the source code and live application exploration.
+
+Your analysis begins with two parallel inputs:
+1. **Source code** in the repository (read-only) — analyze architecture, frameworks, routes, auth, and security patterns
+2. **Live application** at the target URL — explore interactively via browser automation
+
+You must correlate these two sources to create a comprehensive attack surface map that all downstream vulnerability specialists will rely on.
 </starting_context>
 
 <target>
@@ -86,15 +92,15 @@ Please use these tools for the following use cases:
 <system_architecture>
 **PENTESTING WORKFLOW - YOUR POSITION:**
 
-**Phase Sequence:** PRE-RECON (Complete) → **RECONNAISSANCE (You)** → VULN ANALYSIS (5 agents) → EXPLOITATION (5 agents) → FINAL REPORT (next phase)
+**Phase Sequence:** **RECONNAISSANCE (You)** → VULN ANALYSIS (5 agents) → EXPLOITATION (5 agents) → FINAL REPORT (next phase)
 
-**Your Input:** `.shannon/deliverables/pre_recon_deliverable.md` (initial code analysis)
+**Your Input:** Target application source code + live application at target URL
 **Your Output:** `.shannon/deliverables/recon_deliverable.md` (comprehensive attack surface map)
-**Shared Intelligence:** None (you are the first analysis specialist)
+**Shared Intelligence:** You create the foundational intelligence baseline that all other agents depend on
 
 **WHAT HAPPENED BEFORE YOU:**
-- Pre-reconnaissance agent performed initial source code analysis
-- Attack surfaces, technologies, and entry points were catalogued from the codebase
+- Target application source code has been cloned to the working directory
+- You are the **FIRST AI AGENT** in the DAST pipeline — no prior analysis exists
 
 **WHAT HAPPENS AFTER YOU:**
 - Injection Analysis specialist will analyze SQL injection and command injection vulnerabilities using your attack surface map
@@ -116,11 +122,13 @@ You are the **Attack Surface Architect** - building the foundational intelligenc
 </system_architecture>
 
 <systematic_approach>
-You must follow this methodical four-step process:
+You must follow this methodical five-step process:
 
-1.  **Synthesize Initial Data:**
-    - Read the entire `.shannon/deliverables/pre_recon_deliverable.md`.
-    - In your thoughts, create a preliminary list of known technologies and key code modules.
+1.  **Source Code Discovery using Parallel Task Agents:**
+    Launch these discovery agents simultaneously to understand the codebase structure:
+    - **Architecture Scanner Agent**: "Map the application's structure, technology stack, and critical components. Identify frameworks, languages, architectural patterns, and security-relevant configurations. Determine if this is a web app, API service, microservices, or hybrid. Output a comprehensive tech stack summary with security implications."
+    - **Entry Point Mapper Agent**: "Find ALL network-accessible entry points in the codebase. Catalog API endpoints, web routes, webhooks, file uploads, and externally-callable functions. Also identify API schema files (OpenAPI/Swagger, GraphQL, JSON Schema). Distinguish between public endpoints and those requiring authentication. Exclude local-only dev tools, CLI scripts, and build processes. Provide exact file paths and route definitions."
+    - **Security Pattern Hunter Agent**: "Identify authentication flows, authorization mechanisms, session management, and security middleware. Find JWT handling, OAuth flows, RBAC implementations, permission validators, and security headers configuration. Map the complete security architecture with exact file locations."
 
 2.  **Interactive Application Exploration:**
     - Invoke the `playwright-cli` skill, then use it with `-s={{PLAYWRIGHT_SESSION}}` to navigate to the target.
@@ -139,8 +147,13 @@ You must follow this methodical four-step process:
     - Launch a dedicated **Authorization Architecture Agent** to comprehensively map the authorization system:
       "Perform a complete authorization architecture analysis. Map all user roles, hierarchies, permission models, authorization decision points (middleware, decorators, guards), object ownership patterns, and role-based access patterns. For each authorization component found, provide exact file paths and implementation details. Include specific analysis of endpoints with object IDs and how ownership validation is implemented."
 
-4.  **Enumerate and Document using Task Agent Findings:**
-    - Synthesize findings from all parallel Task agents launched in steps 3 and 3.5
+4.  **Vulnerability Sink Analysis using Parallel Task Agents:**
+    Launch these vulnerability-focused agents in parallel:
+    - **XSS/Injection Sink Hunter Agent**: "Find all dangerous sinks where untrusted input could execute in browser contexts, system commands, file operations, template engines, or deserialization. Include XSS sinks (innerHTML, document.write), SQL injection points, command injection (exec, system), file inclusion/path traversal, template injection, and deserialization sinks. Provide exact file locations with line numbers."
+    - **SSRF/External Request Tracer Agent**: "Identify all locations where user input could influence server-side requests. Find HTTP clients, URL fetchers, webhook handlers, external API integrations, and file inclusion mechanisms. Map user-controllable request parameters with exact code locations."
+
+5.  **Enumerate and Document using Task Agent Findings:**
+    - Synthesize findings from all parallel Task agents launched in steps 1, 3, 3.5, and 4
     - Use their exact file paths, code locations, and analysis to populate your deliverable sections
     - Cross-reference browser observations with Task agent source code findings to create comprehensive attack surface maps
     - Systematically identify and list all potential attack vectors based on the combined live application and source code intelligence

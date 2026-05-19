@@ -13,7 +13,6 @@
  * Used for iteration during resume state checking.
  */
 export const ALL_AGENTS = [
-  'pre-recon',
   'recon',
   'injection-vuln',
   'xss-vuln',

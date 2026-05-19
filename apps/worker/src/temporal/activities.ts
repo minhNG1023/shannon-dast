@@ -248,10 +248,6 @@ async function runAgentActivity(agentName: AgentName, input: ActivityInput): Pro
   }
 }
 
-export async function runPreReconAgent(input: ActivityInput): Promise<AgentMetrics> {
-  return runAgentActivity('pre-recon', input);
-}
-
 export async function runReconAgent(input: ActivityInput): Promise<AgentMetrics> {
   return runAgentActivity('recon', input);
 }

@@ -44,7 +44,7 @@ Success criterion: A complete source-to-sink trace for every identified SSRF vul
 
 **Phase Sequence:** RECON (Complete) → **SSRF ANALYSIS (You)** → EXPLOITATION (next phase)
 
-**Your Input:** `.shannon/deliverables/recon_deliverable.md`, `.shannon/deliverables/pre_recon_deliverable.md` (reconnaissance findings)
+**Your Input:** `.shannon/deliverables/recon_deliverable.md` (reconnaissance findings)
 **Your Output:** `.shannon/deliverables/ssrf_analysis_deliverable.md` (analysis report for exploitation phase)
 
 **WHAT HAPPENED BEFORE YOU:**
@@ -118,7 +118,7 @@ An **exploitable vulnerability** is a data flow where user-controlled input infl
 # White-Box Vulnerability Analysis Procedure: Server-Side Request Forgery (SSRF)
 
 NOTE ON "FOR ALL": whenever an item begins with "for all …", use the TodoWrite tool to create a separate task for each relevant endpoint/flow that needs to be analyzed.
-From `.shannon/deliverables/pre_recon_deliverable.md`, use Section 10 (SSRF Sinks) to guide your tasks.
+From `.shannon/deliverables/recon_deliverable.md`, use the SSRF-relevant sections (API endpoints, external request patterns) to guide your tasks.
 
 ## 1) Identify HTTP Client Usage Patterns
 - For all endpoints that accept URL parameters, callback URLs, webhook URLs, or file paths, trace how these inputs are processed.
@@ -164,13 +164,13 @@ From `.shannon/deliverables/pre_recon_deliverable.md`, use Section 10 (SSRF Sink
 
 ## **Backward Taint Analysis Methodology for SSRF**
 
-**Goal:** Identify vulnerable data flow paths by starting at the SSRF sinks received from the pre-recon phase and tracing backward to their sanitizations and sources. Optimized for **classic**, **blind**, and **semi-blind** SSRF.
+**Goal:** Identify vulnerable data flow paths by starting at the SSRF sinks identified during reconnaissance and tracing backward to their sanitizations and sources. Optimized for **classic**, **blind**, and **semi-blind** SSRF.
 
 **Core Principle:** Data is assumed tainted until a **context-appropriate network request sanitizer** is encountered on its path to the sink.
 
 ### **1) Create a To-Do Item for Each SSRF Sink**
 
-Inside `.shannon/deliverables/pre_recon_deliverable.md` under section `##10. SSRF Sinks##`.
+From `.shannon/deliverables/recon_deliverable.md`, identify all SSRF sinks documented in the reconnaissance findings. If the recon deliverable lacks SSRF sink details, launch a Task agent to find all server-side request sinks in the codebase.
 
 Use the TodoWrite tool to create a task for each discovered sink (any server-side request composed even partially from user input).
 
